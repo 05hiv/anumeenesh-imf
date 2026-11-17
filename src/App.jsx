@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ShieldCheck, Award, Users, FileText, PhoneCall, UserCheck, Menu, X, ArrowRight, Download, Upload } from 'lucide-react';
+import { HashRouter as Router, Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ShieldCheck, Award, Users, FileText, PhoneCall, UserCheck, Menu, X, ArrowRight, Download, Upload, Zap } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 // Initialize sample data with Unique IDs, Emails, and Passwords in localStorage
@@ -10,21 +9,21 @@ const initializeSampleData = () => {
   if (!existingUsers) {
     const sampleUsers = [
       // Agents
-      { id: 'AGT_001', name: 'Shivam', email: 'shivam@anumeenesh.com', password: '123', role: 'agent', phone: '9876543210', panCard: 'SHIV1234A', aadhaarCard: '1111 2222 3333', referredBy: '' },
-      { id: 'AGT_002', name: 'Deepak Gupta', email: 'deepak@anumeenesh.com', password: '123', role: 'agent', phone: '9876543211', panCard: 'DEEP1234B', aadhaarCard: '2222 3333 4444', referredBy: '' },
-      { id: 'AGT_003', name: 'Santosh Tiwari', email: 'santosh@anumeenesh.com', password: '123', role: 'agent', phone: '9876543212', panCard: 'SANT1234C', aadhaarCard: '3333 4444 5555', referredBy: '' },
+      { id: 'AGT_001', name: 'Shivam', email: 'shivam@anumeenesh.com', password: '123', role: 'agent', phone: '9876543210', panCard: 'SHIV1234A', aadhaarCard: '[Aadhaar Redacted]', referredBy: '' },
+      { id: 'AGT_002', name: 'Deepak Gupta', email: 'deepak@anumeenesh.com', password: '123', role: 'agent', phone: '9876543211', panCard: 'DEEP1234B', aadhaarCard: '[Aadhaar Redacted]', referredBy: '' },
+      { id: 'AGT_003', name: 'Santosh Tiwari', email: 'santosh@anumeenesh.com', password: '123', role: 'agent', phone: '9876543212', panCard: 'SANT1234C', aadhaarCard: '[Aadhaar Redacted]', referredBy: '' },
       
       // Customers under Shivam
-      { id: 'CUST_101', name: 'Aman', email: 'aman@gmail.com', password: '123', role: 'customer', phone: '9123456780', panCard: 'AMAN1234X', aadhaarCard: '4444 5555 6666', referredBy: 'Shivam' },
-      { id: 'CUST_102', name: 'Deepak', email: 'deepak.cust@gmail.com', password: '123', role: 'customer', phone: '9123456781', panCard: 'CUST1234Y', aadhaarCard: '5555 6666 7777', referredBy: 'Shivam' },
+      { id: 'CUST_101', name: 'Aman', email: 'aman@gmail.com', password: '123', role: 'customer', phone: '9123456780', panCard: 'AMAN1234X', aadhaarCard: '[Aadhaar Redacted]', referredBy: 'Shivam' },
+      { id: 'CUST_102', name: 'Deepak', email: 'deepak.cust@gmail.com', password: '123', role: 'customer', phone: '9123456781', panCard: 'CUST1234Y', aadhaarCard: '[Aadhaar Redacted]', referredBy: 'Shivam' },
 
       // Customers under Deepak Gupta
-      { id: 'CUST_103', name: 'Santosh', email: 'santosh.cust@gmail.com', password: '123', role: 'customer', phone: '9123456782', panCard: 'SANT5678X', aadhaarCard: '6666 7777 8888', referredBy: 'Deepak Gupta' },
-      { id: 'CUST_104', name: 'Mitali', email: 'mitali@gmail.com', password: '123', role: 'customer', phone: '9123456783', panCard: 'MITA1234Z', aadhaarCard: '7777 8888 9999', referredBy: 'Deepak Gupta' },
+      { id: 'CUST_103', name: 'Santosh', email: 'santosh.cust@gmail.com', password: '123', role: 'customer', phone: '9123456782', panCard: 'SANT5678X', aadhaarCard: '[Aadhaar Redacted]', referredBy: 'Deepak Gupta' },
+      { id: 'CUST_104', name: 'Mitali', email: 'mitali@gmail.com', password: '123', role: 'customer', phone: '9123456783', panCard: 'MITA1234Z', aadhaarCard: '[Aadhaar Redacted]', referredBy: 'Deepak Gupta' },
 
       // Customers under Santosh Tiwari
-      { id: 'CUST_105', name: 'Shivam Sharma', email: 'shivam.sharma@gmail.com', password: '123', role: 'customer', phone: '9123456784', panCard: 'SHIV5678Z', aadhaarCard: '8888 9999 0000', referredBy: 'Santosh Tiwari' },
-      { id: 'CUST_106', name: 'Tarun Mathur', email: 'tarun@gmail.com', password: '123', role: 'customer', phone: '9123456785', panCard: 'TARU1234Z', aadhaarCard: '9999 0000 1111', referredBy: 'Santosh Tiwari' }
+      { id: 'CUST_105', name: 'Shivam Sharma', email: 'shivam.sharma@gmail.com', password: '123', role: 'customer', phone: '9123456784', panCard: 'SHIV5678Z', aadhaarCard: '[Aadhaar Redacted]', referredBy: 'Santosh Tiwari' },
+      { id: 'CUST_106', name: 'Tarun Mathur', email: 'tarun@gmail.com', password: '123', role: 'customer', phone: '9123456785', panCard: 'TARU1234Z', aadhaarCard: '[Aadhaar Redacted]', referredBy: 'Santosh Tiwari' }
     ];
     localStorage.setItem('anumeenesh_users', JSON.stringify(sampleUsers));
   }
@@ -248,7 +247,6 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     
-    // Default Admin Login
     if (email === "admin@anumeenesh.com" && password === "admin123" && role === "admin") {
       const adminUser = { id: 'ADM_01', name: 'Admin', role: 'admin', email: 'admin@anumeenesh.com', password: 'admin123' };
       localStorage.setItem('currentUser', JSON.stringify(adminUser));
@@ -265,15 +263,62 @@ function Login() {
       else if (role === 'agent') navigate('/agent-dashboard');
       else navigate('/customer-dashboard');
     } else {
-      alert('Invalid login credentials or role. For Admin use: admin@anumeenesh.com / admin123');
+      alert('Invalid login credentials or role.');
+    }
+  };
+
+  const directLoginAdmin = () => {
+    const adminUser = { id: 'ADM_01', name: 'Admin', role: 'admin', email: 'admin@anumeenesh.com', password: 'admin123' };
+    localStorage.setItem('currentUser', JSON.stringify(adminUser));
+    navigate('/admin-dashboard');
+  };
+
+  const directLoginAgent = (agentEmail) => {
+    const users = JSON.parse(localStorage.getItem('anumeenesh_users') || '[]');
+    const found = users.find(u => u.email === agentEmail && u.role === 'agent');
+    if (found) {
+      localStorage.setItem('currentUser', JSON.stringify(found));
+      navigate('/agent-dashboard');
+    }
+  };
+
+  const directLoginCustomer = (custEmail) => {
+    const users = JSON.parse(localStorage.getItem('anumeenesh_users') || '[]');
+    const found = users.find(u => u.email === custEmail && u.role === 'customer');
+    if (found) {
+      localStorage.setItem('currentUser', JSON.stringify(found));
+      navigate('/customer-dashboard');
     }
   };
 
   return (
-    <div className="max-w-md mx-auto py-16 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-brandGold">
-        <h2 className="text-3xl font-bold text-brandBlue text-center mb-2">Portal Login</h2>
-        <p className="text-center text-xs text-gray-500 mb-6">Default Admin: admin@anumeenesh.com / admin123</p>
+    <div className="max-w-lg mx-auto py-16 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-brandGold space-y-6">
+        <div>
+          <h2 className="text-3xl font-bold text-brandBlue text-center mb-2">Portal Login</h2>
+          <p className="text-center text-xs text-gray-500">Select role & enter credentials or use Direct Quick Login below</p>
+        </div>
+
+        <div className="p-4 bg-yellow-50 border border-brandGold rounded-xl space-y-3">
+          <div className="flex items-center gap-2 text-brandBlue font-bold text-sm">
+            <Zap size={16} className="text-yellow-600" /> Direct One-Click Test Login:
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <button type="button" onClick={directLoginAdmin} className="bg-brandBlue text-brandGold text-xs font-bold py-2 px-3 rounded shadow hover:bg-blue-900 transition">
+              🚀 Direct Admin Login
+            </button>
+            <button type="button" onClick={() => directLoginAgent('shivam@anumeenesh.com')} className="bg-brandGold text-brandBlue text-xs font-bold py-2 px-3 rounded shadow hover:bg-yellow-500 transition">
+              ⚡ Direct Agent (Shivam)
+            </button>
+            <button type="button" onClick={() => directLoginCustomer('aman@gmail.com')} className="bg-blue-700 text-white text-xs font-bold py-2 px-3 rounded shadow hover:bg-blue-800 transition">
+              ⚡ Direct Customer (Aman)
+            </button>
+            <button type="button" onClick={() => directLoginCustomer('tarun@gmail.com')} className="bg-green-700 text-white text-xs font-bold py-2 px-3 rounded shadow hover:bg-green-800 transition">
+              ⚡ Direct Customer (Tarun)
+            </button>
+          </div>
+        </div>
+
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block font-medium text-gray-700 mb-1">Select Role</label>
@@ -298,7 +343,7 @@ function Signup() {
   
   const [formData, setFormData] = useState({
     name: '', email: '', password: '', role: 'customer',
-    phone: '', panCard: '', aadhaarCard: '', referredBy: refCode
+    phone: '', panCard: '', aadhaarCard: '[Aadhaar Redacted]', referredBy: refCode
   });
   
   const navigate = useNavigate();
@@ -311,7 +356,6 @@ function Signup() {
       return;
     }
 
-    // Automatically generate a Unique ID based on role
     const uniqueId = formData.role === 'agent' 
       ? `AGT_${Math.floor(100 + Math.random() * 900)}` 
       : `CUST_${Math.floor(100 + Math.random() * 900)}`;
@@ -418,7 +462,6 @@ function AdminDashboard() {
         </div>
       </div>
 
-      {/* Admin Table showing Unique ID, Name, Email, Password, Role, Phone, Assigned Agent */}
       <div className="bg-white p-6 rounded-xl shadow overflow-x-auto">
         <h2 className="text-xl font-bold text-brandBlue mb-4">All Registered Users, Agents & Credentials Database</h2>
         <table className="w-full text-left border-collapse text-xs">
@@ -453,7 +496,6 @@ function AdminDashboard() {
         </table>
       </div>
 
-      {/* Contact Queries Table */}
       <div className="bg-white p-6 rounded-xl shadow overflow-x-auto">
         <h2 className="text-xl font-bold text-brandBlue mb-4">Contact Us Enquiries & Queries</h2>
         <table className="w-full text-left border-collapse text-xs">
@@ -491,7 +533,7 @@ function AdminDashboard() {
 
 function AgentDashboard() {
   const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{"name": "Shivam", "email": "shivam@anumeenesh.com"}');
-  const referralLink = `${window.location.origin}/signup?ref=${encodeURIComponent(currentUser.name)}`;
+  const referralLink = `${window.location.origin}${window.location.pathname}#/signup?ref=${encodeURIComponent(currentUser.name)}`;
 
   const allUsers = JSON.parse(localStorage.getItem('anumeenesh_users') || '[]');
   const myCustomers = allUsers.filter(u => u.role === 'customer' && u.referredBy?.toLowerCase() === currentUser.name.toLowerCase());
@@ -505,7 +547,7 @@ function AgentDashboard() {
         <p className="text-gray-600 text-sm mb-4">Share this link to register customers under your name automatically:</p>
         <div className="flex gap-4">
           <input type="text" readOnly value={referralLink} className="w-full p-3 bg-gray-100 border rounded-lg text-sm select-all font-mono" />
-          <button onClick={()=>{navigator.clipboard.writeText(referralLink); alert('Referral link copied!');}} className="bg-brandGold text-brandBlue font-bold px-6 py-3 rounded-lg shadow">Copy</button>
+          <button type="button" onClick={()=>{navigator.clipboard.writeText(referralLink); alert('Referral link copied!');}} className="bg-brandGold text-brandBlue font-bold px-6 py-3 rounded-lg shadow">Copy</button>
         </div>
       </div>
 
